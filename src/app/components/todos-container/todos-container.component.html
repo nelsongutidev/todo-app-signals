@@ -1,0 +1,43 @@
+<div class="align-top mr-4 mb-4 w-full max-w-md">
+  <h2>To do</h2>
+
+  <div
+    cdkDropList
+    #todoList="cdkDropList"
+    [cdkDropListData]="todos()"
+    [cdkDropListConnectedTo]="[doneList]"
+    class="border-2 border-slate-600 rounded divide-y divide-black bg-white overflow-hidden"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <div
+      class="py-4 px-2 flex items-center content-center cursor-move"
+      *ngFor="let item of todos()"
+      cdkDrag
+    >
+      {{ item.name }}
+    </div>
+  </div>
+</div>
+
+<div class="align-top mr-4 mb-4 w-full max-w-md">
+  <h2>Done</h2>
+
+  <div
+    cdkDropList
+    #doneList="cdkDropList"
+    [cdkDropListData]="done()"
+    [cdkDropListConnectedTo]="[todoList]"
+    class="border-2 border-slate-600 rounded divide-y divide-black bg-white overflow-hidden"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <div
+      class="py-4 px-2 flex items-center content-center cursor-move"
+      *ngFor="let item of done()"
+      cdkDrag
+    >
+      {{ item.name }}
+    </div>
+  </div>
+</div>
+
+<pre>{{ tasks() | json }}</pre>
