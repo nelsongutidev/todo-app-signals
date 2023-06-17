@@ -1,43 +1,77 @@
-<div class="align-top mr-4 mb-4 w-full max-w-md">
-  <h2>To do</h2>
-
-  <div
-    cdkDropList
-    #todoList="cdkDropList"
-    [cdkDropListData]="todos()"
-    [cdkDropListConnectedTo]="[doneList]"
-    class="border-2 border-slate-600 rounded divide-y divide-black bg-white overflow-hidden"
-    (cdkDropListDropped)="drop($event)"
+<section class="flex justify-center gap-4 flex-wrap">
+  <input
+    #todoInput
+    class="flex p-2 border-2 border-slate-600 rounded w-80"
+    type="text"
+    [ngModel]="inputSignal()"
+    (ngModelChange)="inputSignal.set(todoInput.value)"
+  />
+  <button
+    class="btn"
+    (click)="addTodo()"
+    [disabled]="inputSignal().length === 0"
   >
+    Agregar tarea
+  </button>
+</section>
+<p *ngIf="tasks().length > 0" class="p-4 py-8 text-center">
+  Totales: {{ totals() }}
+</p>
+<section
+  class="flex justify-center flex-wrap px-2 gap-4"
+  *ngIf="tasks().length > 0"
+>
+  <div class="align-top mb-4 w-full max-w-md">
+    <h2 class="text-center font-bold mb-4">Tareas pendientes</h2>
+
     <div
-      class="py-4 px-2 flex items-center content-center cursor-move"
-      *ngFor="let item of todos()"
-      cdkDrag
+      class="border-2 border-slate-600 rounded divide-y divide-black bg-white overflow-hidden"
+      *ngIf="todos().length > 0"
     >
-      {{ item.name }}
+      <div
+        class="py-4 px-2 flex items-center content-center"
+        *ngFor="let item of todos()"
+      >
+        <div class="flex flex-col w-full">
+          <p class="h-12 pl-4">{{ item?.name | titlecase }}</p>
+          <div class="flex gap-2 justify-end">
+            <button class="btn btn-danger" (click)="removeTodo(item)">
+              Remover
+            </button>
+            <button class="btn btn-primary" (click)="completeTodo(item)">
+              Completar
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="align-top mr-4 mb-4 w-full max-w-md">
-  <h2>Done</h2>
+  <div class="align-top mb-4 w-full max-w-md">
+    <h2 class="text-center font-bold mb-4">Tareas Completadas</h2>
 
-  <div
-    cdkDropList
-    #doneList="cdkDropList"
-    [cdkDropListData]="done()"
-    [cdkDropListConnectedTo]="[todoList]"
-    class="border-2 border-slate-600 rounded divide-y divide-black bg-white overflow-hidden"
-    (cdkDropListDropped)="drop($event)"
-  >
     <div
-      class="py-4 px-2 flex items-center content-center cursor-move"
-      *ngFor="let item of done()"
-      cdkDrag
+      class="border-2 border-slate-600 rounded divide-y divide-black bg-white overflow-hidden"
+      *ngIf="done().length > 0"
     >
-      {{ item.name }}
+      <div
+        class="py-4 px-2 flex items-center content-center"
+        *ngFor="let item of done()"
+      >
+        <div class="flex flex-col w-full">
+          <p class="h-12 pl-4 line-through">
+            {{ item?.name | titlecase }}
+          </p>
+          <div class="flex gap-2 justify-end">
+            <button
+              class="btn btn-primary"
+              (click)="markTodoAsIncomplete(item)"
+            >
+              Marcar como pendiente
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-
-<pre>{{ tasks() | json }}</pre>
+</section>
