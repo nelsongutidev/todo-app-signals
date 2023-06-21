@@ -6,8 +6,6 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-const createRandomId = () => Math.round(Math.random() * 10000).toString();
-
 import {
   Task,
   TodosServiceService,
@@ -29,39 +27,4 @@ export class TodosContainerComponent {
   totals = this.todosService.totals;
 
   inputSignal = signal('');
-
-  addTodo() {
-    this.todosService.tasks.mutate((tasks) =>
-      tasks.push({
-        name: this.inputSignal(),
-        completed: false,
-        id: createRandomId(),
-      })
-    );
-    this.inputSignal.set('');
-  }
-
-  removeTodo(task: Task) {
-    this.todosService.tasks.update(
-      (tasks) => (tasks = tasks.filter((t) => t.id !== task.id))
-    );
-  }
-
-  completeTodo(task: Task) {
-    this.todosService.tasks.mutate((tasks) => {
-      const taskCompleted = tasks.find((t) => t.id === task.id);
-      if (taskCompleted) {
-        taskCompleted.completed = true;
-      }
-    });
-  }
-
-  markTodoAsIncomplete(task: Task) {
-    this.todosService.tasks.mutate((tasks) => {
-      const taskCompleted = tasks.find((t) => t.id === task.id);
-      if (taskCompleted) {
-        taskCompleted.completed = false;
-      }
-    });
-  }
 }

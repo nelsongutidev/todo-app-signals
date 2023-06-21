@@ -5,11 +5,13 @@
     type="text"
     [value]="inputSignal()"
     (keyup)="inputSignal.set(todoInput.value)"
-    (keyup.enter)="addTodo()"
+    (keyup.enter)="
+      todosService.addTodo(inputSignal()); this.inputSignal.set('')
+    "
   />
   <button
     class="btn"
-    (click)="addTodo()"
+    (click)="todosService.addTodo(inputSignal()); this.inputSignal.set('')"
     [disabled]="inputSignal().length === 0"
   >
     Agregar tarea
@@ -36,10 +38,16 @@
         <div class="flex flex-col w-full">
           <p class="h-12 pl-4">{{ item?.name | titlecase }}</p>
           <div class="flex gap-2 justify-end">
-            <button class="btn btn-danger" (click)="removeTodo(item)">
+            <button
+              class="btn btn-danger"
+              (click)="todosService.removeTodo(item)"
+            >
               Remover
             </button>
-            <button class="btn btn-primary" (click)="completeTodo(item)">
+            <button
+              class="btn btn-primary"
+              (click)="todosService.completeTodo(item)"
+            >
               Completar
             </button>
           </div>
@@ -66,7 +74,7 @@
           <div class="flex gap-2 justify-end">
             <button
               class="btn btn-primary"
-              (click)="markTodoAsIncomplete(item)"
+              (click)="todosService.markTodoAsIncomplete(item)"
             >
               Marcar como pendiente
             </button>
