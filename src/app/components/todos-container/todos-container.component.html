@@ -3,8 +3,9 @@
     #todoInput
     class="flex p-2 border-2 border-slate-600 rounded w-80"
     type="text"
-    [ngModel]="inputSignal()"
-    (ngModelChange)="inputSignal.set(todoInput.value)"
+    [value]="inputSignal()"
+    (keyup)="inputSignal.set(todoInput.value)"
+    (keyup.enter)="addTodo()"
   />
   <button
     class="btn"

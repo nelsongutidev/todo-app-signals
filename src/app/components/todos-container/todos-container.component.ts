@@ -1,41 +1,37 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
+  inject,
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 const createRandomId = () => Math.round(Math.random() * 10000).toString();
 
-import { FormsModule } from '@angular/forms';
-
-type Task = {
-  name: string;
-  completed: boolean;
-  id: string;
-};
+import {
+  Task,
+  TodosServiceService,
+} from 'src/app/services/todos-service.service';
 
 @Component({
   selector: 'app-todos-container',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './todos-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [],
 })
 export class TodosContainerComponent {
-  inputSignal = signal('');
-  tasks = signal<Task[]>([]);
+  todosService = inject(TodosServiceService);
+  tasks = this.todosService.tasks;
+  done = this.todosService.done;
+  todos = this.todosService.todos;
+  totals = this.todosService.totals;
 
-  done = computed(() => this.tasks().filter((t: Task) => t?.completed));
-  todos = computed(() => this.tasks().filter((t: Task) => !t?.completed));
-  totals = computed(() => {
-    return `${this.done().length} / ${this.tasks().length}`;
-  });
+  inputSignal = signal('');
 
   addTodo() {
-    this.tasks.mutate((tasks) =>
+    this.todosService.tasks.mutate((tasks) =>
       tasks.push({
         name: this.inputSignal(),
         completed: false,
@@ -46,13 +42,13 @@ export class TodosContainerComponent {
   }
 
   removeTodo(task: Task) {
-    this.tasks.update(
+    this.todosService.tasks.update(
       (tasks) => (tasks = tasks.filter((t) => t.id !== task.id))
     );
   }
 
   completeTodo(task: Task) {
-    this.tasks.mutate((tasks) => {
+    this.todosService.tasks.mutate((tasks) => {
       const taskCompleted = tasks.find((t) => t.id === task.id);
       if (taskCompleted) {
         taskCompleted.completed = true;
@@ -61,7 +57,7 @@ export class TodosContainerComponent {
   }
 
   markTodoAsIncomplete(task: Task) {
-    this.tasks.mutate((tasks) => {
+    this.todosService.tasks.mutate((tasks) => {
       const taskCompleted = tasks.find((t) => t.id === task.id);
       if (taskCompleted) {
         taskCompleted.completed = false;
