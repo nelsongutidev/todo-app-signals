@@ -4,7 +4,7 @@
     class="flex p-2 border-2 border-slate-600 rounded w-80"
     type="text"
     [value]="inputSignal()"
-    (keyup)="inputSignal.set(todoInput.value)"
+    (input)="inputSignal.set(todoInput.value)"
     (keyup.enter)="
       todosService.addTodo(inputSignal()); this.inputSignal.set('')
     "
@@ -46,7 +46,7 @@
             </button>
             <button
               class="btn btn-primary"
-              (click)="todosService.completeTodo(item)"
+              (click)="todosService.toggleTodo(item)"
             >
               Completar
             </button>
@@ -74,7 +74,7 @@
           <div class="flex gap-2 justify-end">
             <button
               class="btn btn-primary"
-              (click)="todosService.markTodoAsIncomplete(item)"
+              (click)="todosService.toggleTodo(item)"
             >
               Marcar como pendiente
             </button>

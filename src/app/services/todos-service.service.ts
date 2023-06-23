@@ -41,20 +41,11 @@ export class TodosServiceService {
     );
   }
 
-  completeTodo(task: Task) {
+  toggleTodo(task: Task) {
     this.tasks.mutate((tasks) => {
-      const taskCompleted = tasks.find((t) => t.id === task.id);
-      if (taskCompleted) {
-        taskCompleted.completed = true;
-      }
-    });
-  }
-
-  markTodoAsIncomplete(task: Task) {
-    this.tasks.mutate((tasks) => {
-      const taskCompleted = tasks.find((t) => t.id === task.id);
-      if (taskCompleted) {
-        taskCompleted.completed = false;
+      const taskToggled = tasks.find((t) => t.id === task.id);
+      if (taskToggled) {
+        taskToggled.completed = !taskToggled.completed;
       }
     });
   }
