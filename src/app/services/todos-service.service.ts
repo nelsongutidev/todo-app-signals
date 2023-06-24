@@ -1,4 +1,5 @@
-import { Injectable, computed, signal, effect } from '@angular/core';
+import { Injectable, computed, signal, effect, inject } from '@angular/core';
+import { LocalStorageService } from './local-storage.service';
 
 const createRandomId = () => Math.round(Math.random() * 10000).toString();
 
@@ -8,22 +9,28 @@ export type Task = {
   id: string;
 };
 
+export const DATA_KEY = 'todos-app-data';
+
 @Injectable({
   providedIn: 'root',
 })
 export class TodosServiceService {
-  // constructor() {
-  //   effect(() => {
-  //     this.tasks();
-  //     console.log('signal changed');
-  //   });
-  // }
-  tasks = signal<Task[]>([]);
+  localStorageService = inject(LocalStorageService);
+
+  tasks = signal<Task[]>(
+    JSON.parse(this.localStorageService.getItem(DATA_KEY) || '[]')
+  );
   done = computed(() => this.tasks().filter((t: Task) => t?.completed));
   todos = computed(() => this.tasks().filter((t: Task) => !t?.completed));
   totals = computed(() => {
-    return `${this.done().length} / ${this.tasks().length}`;
+    return `${this.done().length} / ${this.tasks()?.length}`;
   });
+
+  constructor() {
+    effect(() => {
+      this.localStorageService.setItem(DATA_KEY, JSON.stringify(this.tasks()));
+    });
+  }
 
   addTodo(name: string) {
     this.tasks.mutate((tasks) =>
