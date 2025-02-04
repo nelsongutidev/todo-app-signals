@@ -43,7 +43,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/todo-app/browser"
+              "base": "dist/todo-app"
             },
             "index": "src/index.html",
             "polyfills": [
@@ -52,7 +52,8 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/_redirects"
             ],
             "styles": [
               "src/styles.css"
