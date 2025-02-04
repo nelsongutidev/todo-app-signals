@@ -33,27 +33,20 @@ export class TodosServiceService {
   }
 
   addTodo(name: string) {
-    this.tasks.mutate((tasks) =>
-      tasks.push({
-        name,
-        completed: false,
-        id: createRandomId(),
-      })
-    );
+    this.tasks.update((tasks) => {
+      return [...tasks, { name, completed: false, id: createRandomId() }];
+    });
   }
 
   removeTodo(task: Task) {
-    this.tasks.update(
-      (tasks) => (tasks = tasks.filter((t) => t.id !== task.id))
-    );
+    this.tasks.update((tasks) => tasks.filter((t) => t.id !== task.id));
   }
 
   toggleTodo(task: Task) {
-    this.tasks.mutate((tasks) => {
-      const taskToggled = tasks.find((t) => t.id === task.id);
-      if (taskToggled) {
-        taskToggled.completed = !taskToggled.completed;
-      }
+    this.tasks.update((tasks) => {
+      return tasks.map((t) =>
+        t.id === task.id ? { ...t, completed: !t.completed } : t
+      );
     });
   }
 }

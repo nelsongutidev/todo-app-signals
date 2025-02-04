@@ -36,7 +36,7 @@
         *ngFor="let item of todos()"
       >
         <div class="flex flex-col w-full">
-          <p class="h-12 pl-4">{{ item?.name | titlecase }}</p>
+          <p class="h-12 pl-4">{{ item?.name }}</p>
           <div class="flex gap-2 justify-end">
             <button
               class="btn btn-danger"
@@ -69,9 +69,15 @@
       >
         <div class="flex flex-col w-full">
           <p class="h-12 pl-4 line-through">
-            {{ item?.name | titlecase }}
+            {{ item?.name }}
           </p>
           <div class="flex gap-2 justify-end">
+            <button
+              class="btn btn-danger"
+              (click)="todosService.removeTodo(item)"
+            >
+              Remover
+            </button>
             <button
               class="btn btn-primary"
               (click)="todosService.toggleTodo(item)"
