@@ -8,85 +8,89 @@
     (keyup.enter)="
       todosService.addTodo(inputSignal()); this.inputSignal.set('')
     "
-  />
+    />
   <button
     class="btn"
     (click)="todosService.addTodo(inputSignal()); this.inputSignal.set('')"
     [disabled]="inputSignal().length === 0"
-  >
+    >
     Agregar tarea
   </button>
 </section>
-<p *ngIf="tasks().length > 0" class="p-4 py-8 text-center">
-  Totales: {{ totals() }}
-</p>
-<section
-  class="flex justify-center flex-wrap px-2 gap-4"
-  *ngIf="tasks().length > 0"
->
-  <div class="align-top mb-4 w-full max-w-md">
-    <h2 class="text-center font-bold mb-4">Tareas pendientes</h2>
-
-    <div
-      class="border-2 border-slate-600 rounded divide-y divide-black bg-white overflow-hidden"
-      *ngIf="todos().length > 0"
+@if (tasks().length > 0) {
+  <p class="p-4 py-8 text-center">
+    Totales: {{ totals() }}
+  </p>
+}
+@if (tasks().length > 0) {
+  <section
+    class="flex justify-center flex-wrap px-2 gap-4"
     >
-      <div
-        class="py-4 px-2 flex items-center content-center"
-        *ngFor="let item of todos()"
-      >
-        <div class="flex flex-col w-full">
-          <p class="h-12 pl-4">{{ item?.name }}</p>
-          <div class="flex gap-2 justify-end">
-            <button
-              class="btn btn-danger"
-              (click)="todosService.removeTodo(item)"
-            >
-              Remover
-            </button>
-            <button
-              class="btn btn-primary"
-              (click)="todosService.toggleTodo(item)"
-            >
-              Completar
-            </button>
-          </div>
+    <div class="align-top mb-4 w-full max-w-md">
+      <h2 class="text-center font-bold mb-4">Tareas pendientes</h2>
+      @if (todos().length > 0) {
+        <div
+          class="border-2 border-slate-600 rounded divide-y divide-black bg-white overflow-hidden"
+          >
+          @for (item of todos(); track item) {
+            <div
+              class="py-4 px-2 flex items-center content-center"
+              >
+              <div class="flex flex-col w-full">
+                <p class="h-12 pl-4">{{ item?.name }}</p>
+                <div class="flex gap-2 justify-end">
+                  <button
+                    class="btn btn-danger"
+                    (click)="todosService.removeTodo(item)"
+                    >
+                    Remover
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    (click)="todosService.toggleTodo(item)"
+                    >
+                    Completar
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
         </div>
-      </div>
+      }
     </div>
-  </div>
-
-  <div class="align-top mb-4 w-full max-w-md">
-    <h2 class="text-center font-bold mb-4">Tareas Completadas</h2>
-
-    <div
-      class="border-2 border-slate-600 rounded divide-y divide-black bg-white overflow-hidden"
-      *ngIf="done().length > 0"
-    >
-      <div
-        class="py-4 px-2 flex items-center content-center"
-        *ngFor="let item of done()"
-      >
-        <div class="flex flex-col w-full">
-          <p class="h-12 pl-4 line-through">
-            {{ item?.name }}
-          </p>
-          <div class="flex gap-2 justify-end">
-            <button
-              class="btn btn-danger"
-              (click)="todosService.removeTodo(item)"
-            >
-              Remover
-            </button>
-            <button
-              class="btn btn-primary"
-              (click)="todosService.toggleTodo(item)"
-            >
-              Marcar como pendiente
-            </button>
-          </div>
+    <div class="align-top mb-4 w-full max-w-md">
+      <h2 class="text-center font-bold mb-4">Tareas Completadas</h2>
+      @if (done().length > 0) {
+        <div
+          class="border-2 border-slate-600 rounded divide-y divide-black bg-white overflow-hidden"
+          >
+          @for (item of done(); track item) {
+            <div
+              class="py-4 px-2 flex items-center content-center"
+              >
+              <div class="flex flex-col w-full">
+                <p class="h-12 pl-4 line-through">
+                  {{ item?.name }}
+                </p>
+                <div class="flex gap-2 justify-end">
+                  <button
+                    class="btn btn-danger"
+                    (click)="todosService.removeTodo(item)"
+                    >
+                    Remover
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    (click)="todosService.toggleTodo(item)"
+                    >
+                    Marcar como pendiente
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
         </div>
-      </div>
+      }
     </div>
-  </div>
-</section>
+  </section>
+}
