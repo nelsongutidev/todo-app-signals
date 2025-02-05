@@ -4,7 +4,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 import {
   Task,
@@ -14,7 +14,7 @@ import {
 @Component({
   selector: 'app-todos-container',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './todos-container.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [],
